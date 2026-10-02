@@ -214,7 +214,12 @@ def get_enum_variable_name(job, graph_config, variable_name, enum_path, default)
         unreal.log_warning(f"⚠️ Variable '{variable_name}' not found on graph config, fallback to '{default}'")
         return default
 
-    value = overrides.get_value_enum(var, enum)
+    # The job's override only if checked, otherwise the graph's value, as the render does.
+    # An unchecked override keeps its last value in the container: never read it.
+    if overrides.get_variable_assignment_enable_state(var):
+        value = overrides.get_value_enum(var, enum)
+    else:
+        value = var.get_value_enum(enum)
     if value is None:
         unreal.log_error(f"❌ Could not resolve {variable_name} enum value")
         return None
