@@ -1,0 +1,29 @@
+# Unreal build output
+Binaries/
+Intermediate/
+Saved/
+DerivedDataCache/
+
+# IDE / editor
+.vs/
+.vscode/
+*.sln
+*.VC.db
+*.opensdf
+*.sdf
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# OS junk
+.DS_Store
+Thumbs.db
+# Kitsu credentials: never commit. They live only in the P4 workspace / on each machine.
+# See Config/*.ini.example for the format.
+KitsuID.ini
+KitsuBot.ini
+
+# Local Claude Code settings
+.claude/settings.local.json

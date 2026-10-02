@@ -1,0 +1,33 @@
+# Burn-ins for the Kitsu proxies. Off, like the previous proxies: set enable: true to use them.
+# Content types: timecode | framecounter | framerange | date | time_of_day |
+#                filename | sequence_name | metadata.<key> | <custom key>
+# font_size and offset are relative to 1080p.
+
+font: fonts/Vera.ttf
+enable: false
+
+elements:
+  - content: sequence_name
+    anchor: top-left
+    offset: [28, 28]
+    font_size: 24
+    shadow: true
+
+  - content: date
+    anchor: top-right
+    offset: [28, 28]
+    format: "%Y-%m-%d"
+    font_size: 24
+    shadow: true
+
+  - content: timecode
+    anchor: bottom-center
+    offset: [0, 28]
+    font_size: 24
+    shadow: true
+
+  - content: framecounter
+    anchor: bottom-right
+    offset: [28, 28]
+    font_size: 24
+    shadow: true

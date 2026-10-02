@@ -1,0 +1,46 @@
+# Codec presets for daily.
+# Each key becomes the --codec / output.codec value in daily.yaml.
+# Fields: codec, pix_fmt, crf (optional), ffmpeg_args (string of extra flags).
+
+h264_hq:
+  codec: libx264
+  pix_fmt: yuv420p
+  crf: 18
+  ffmpeg_args: "-preset slower -tune film"
+
+h264_lq:
+  codec: libx264
+  pix_fmt: yuv420p
+  crf: 23
+  ffmpeg_args: "-preset fast -tune film"
+
+prores_hq:
+  codec: prores_ks
+  pix_fmt: yuv422p10le
+  ffmpeg_args: "-profile:v 3 -vendor ap10 -qscale:v 7"
+
+prores_4444:
+  codec: prores_ks
+  pix_fmt: yuv444p12le
+  ffmpeg_args: "-profile:v 4 -vendor ap10 -qscale:v 5"
+
+prores_proxy:
+  codec: prores_ks
+  pix_fmt: yuv422p10le
+  ffmpeg_args: "-profile:v 0 -qscale:v 13"
+
+dnxhr_hqx:
+  codec: dnxhd
+  pix_fmt: yuv422p10le
+  ffmpeg_args: "-profile:v dnxhr_hqx"
+
+dnxhr_sq:
+  codec: dnxhd
+  pix_fmt: yuv422p
+  ffmpeg_args: "-profile:v dnxhr_sq"
+
+hevc_hq:
+  codec: libx265
+  pix_fmt: yuv420p10le
+  crf: 18
+  ffmpeg_args: "-preset medium -profile:v main10"

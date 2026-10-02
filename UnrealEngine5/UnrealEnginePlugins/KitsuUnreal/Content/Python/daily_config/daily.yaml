@@ -1,0 +1,30 @@
+# KitsuUnreal proxy settings for the vendored Rapheus/daily (see ../daily/config.py for every key).
+# kitsu_utils.generate_proxy overrides output.framerate with the rate the job renders at
+# (kitsu_utils.get_render_frame_rate); the value here is only the fallback.
+
+# Explicit path to ffmpeg. null = search PATH.
+ffmpeg: null
+
+ocio:
+  # Relative paths resolve against this folder, then its parent (Content/Python)
+  config: "cg-config-v2.2.0_aces-v1.3_ocio-v2.4.ocio"
+  transform:
+    # MRG writes scene-linear ACEScg (tone curve disabled): apply the ACES output transform.
+    type: display
+    src: "ACEScg"
+    display: "sRGB - Display"
+    view: "ACES 1.0 - SDR Video"
+    looks: []
+
+output:
+  codec: h264_hq            # key in codecs.yaml
+  resolution: [1920, 1080]  # letterboxed if the render has another aspect ratio
+  framerate: "25"           # fallback only, see above
+  trim_overscan: true       # crop Unreal's overscan (data window) to the display window
+  strict_frames: true       # an unreadable frame fails the proxy instead of becoming black
+
+cropmask:
+  enable: false
+
+slate:
+  enable: false
