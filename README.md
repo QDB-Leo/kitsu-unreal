@@ -44,8 +44,7 @@ The job's sequence must be a **CineAssembly**:
 
 A plain Level Sequence has no production, so it is not published.
 Names must match Kitsu; a match that only differs by case or surrounding spaces is used, with a warning to fix the name in Kitsu.
-The preview goes on the shot's task of the selected task type. If the shot has no such task, or doesn't exist in Kitsu, it goes on the sequence's task of that type instead:
-that's how a sequence-level task type (e.g. an edit of the whole sequence, rendered from the master sequence) gets its previews.
+The shot doesn't have to exist in Kitsu when the task is on the sequence (see [Which task gets the preview](#which-task-gets-the-preview)).
 
 ## Render graph
 
@@ -69,6 +68,16 @@ The plugin reads the selected entry's **display name** from the enum asset at ru
 
 If the graph doesn't have the variable, the task type defaults to `Layout` and the status to `wip`.
 If the variable is there but its value doesn't resolve, nothing is uploaded rather than publishing on the wrong task.
+
+### Which task gets the preview
+
+With the task type picked in `KitsuTaskType`, the plugin looks for a task of that type:
+1. on the Kitsu **shot**,
+2. if the shot has no such task (or doesn't exist in Kitsu), on the Kitsu **sequence**,
+3. if neither has one, nothing is uploaded and the Output Log says so.
+
+Shot-level task types (Layout, Lighting...) land on the shot. Sequence-level ones, like an edit of the whole sequence rendered from the master sequence, land on the sequence: add an enum entry named like that Kitsu task type and pick it in the job.
+There is no special case for master sequences: they follow the same rule, with the task type picked in the job.
 
 ## Proxy
 
