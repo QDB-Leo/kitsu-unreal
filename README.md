@@ -77,7 +77,6 @@ With the task type picked in `KitsuTaskType`, the plugin looks for a task of tha
 3. if neither has one, nothing is uploaded and the Output Log says so.
 
 Shot-level task types (Layout, Lighting...) land on the shot. Sequence-level ones, like an edit of the whole sequence rendered from the master sequence, land on the sequence: add an enum entry named like that Kitsu task type and pick it in the job.
-There is no special case for master sequences: they follow the same rule, with the task type picked in the job.
 
 ## Proxy
 
