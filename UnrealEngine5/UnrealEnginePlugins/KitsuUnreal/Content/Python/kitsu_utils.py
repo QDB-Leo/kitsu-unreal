@@ -53,19 +53,8 @@ def get_unreal_infos(job):
         unreal.log_error("❌ No Kitsu project for a plain Level Sequence: render a CineAssembly with a production set")
 
 
-    # Check if Bout à Bout : Has Shot track ?
-    shot_track = source_asset.find_tracks_by_type(unreal.MovieSceneCinematicShotTrack)
-    if shot_track :
-        unreal.log("🎞️ Master Sequence detected")
-        task_type = "Bout a Bout"
-        task_status = "wip"
-        return project_name, sequence_name, shot_name, task_type, task_status, comment
-    else:
-        unreal.log("🎞️ Regular Shot detected")
-
-
-
     # Task type and status come from the exposed enum variables of the graph.
+    # A sequence-level task type (e.g. an edit of the whole sequence) is resolved at upload.
     # A missing variable falls back to the default; a value that can't be resolved
     # returns None so the caller skips the upload instead of publishing to the wrong task.
     graph_config = job.get_graph_preset()
@@ -406,21 +395,21 @@ def upload_shots(project_name: str, sequence_name: str, shot_name: str, task_typ
         # Get the shot in Kitsu
         shot = gazu.shot.get_shot_by_name(sequence, shot_name) or _find_by_name(
             gazu.shot.all_shots_for_sequence(sequence), shot_name, "shot")
-        if not shot:
-            # Sequence-level render (e.g. Bout a Bout): publish on the sequence's task
-            unreal.log_warning(f"⚠️ No shot named {shot_name} in sequence {sequence_name}, publishing on the sequence")
-            shot = sequence
 
-        # Task type from input function variable
         task_type = gazu.task.get_task_type_by_name(task_type_name)
         if not task_type:
             unreal.log_error(f"❌ Task type '{task_type_name}' not found in Kitsu")
             return False
 
-        # Get the task for this shot and type
-        task = gazu.task.get_task_by_entity(shot, task_type)
+        # The shot's task, else the sequence's: a sequence-level task type (e.g. an edit of
+        # the whole sequence) has no task on shots, and a master sequence has no shot
+        task = gazu.task.get_task_by_entity(shot, task_type) if shot else None
         if not task:
-            unreal.log_error(f"❌ No '{task_type_name}' task found for shot {shot_name}")
+            task = gazu.task.get_task_by_entity(sequence, task_type)
+            if task:
+                unreal.log(f"🦊 No '{task_type_name}' task on shot {shot_name}, publishing on sequence {sequence_name}")
+        if not task:
+            unreal.log_error(f"❌ No '{task_type_name}' task on shot {shot_name} or sequence {sequence_name}")
             return False
 
         # Get the task status 

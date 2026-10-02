@@ -1,7 +1,7 @@
 # kitsu-unreal
 **KitsuUnreal**: an Unreal Engine 5.7 plugin that publishes Movie Render Graph (MRG) renders to [Kitsu](https://www.cg-wire.com/kitsu) through [gazu](https://github.com/cgwire/gazu).
 
-When an MRG render finishes, the plugin either uploads the video file or builds an mp4 proxy from the EXRs (AcesCG output transform applied) and publishes it as a preview on the matching Kitsu task, with the status picked in the render graph.
+When an MRG render finishes, the plugin either uploads the video file or builds an mp4 proxy from the EXRs (output transform from AcesCG applied) and publishes it as a preview on the matching Kitsu task, with the status picked in the render graph.
 
 See [TODO.md](TODO.md) for open work and the UE 5.7 issues worked around.
 
@@ -44,8 +44,8 @@ The job's sequence must be a **CineAssembly**:
 
 A plain Level Sequence has no production, so it is not published.
 Names must match Kitsu; a match that only differs by case or surrounding spaces is used, with a warning to fix the name in Kitsu.
-If the shot doesn't exist in Kitsu, the preview goes on the sequence's task.
-A master sequence (one with a Cinematic Shot track) is published on the `Bout a Bout` task type, status `wip`.
+The preview goes on the shot's task of the selected task type. If the shot has no such task, or doesn't exist in Kitsu, it goes on the sequence's task of that type instead:
+that's how a sequence-level task type (e.g. an edit of the whole sequence, rendered from the master sequence) gets its previews.
 
 ## Render graph
 
@@ -87,13 +87,10 @@ In the editor, the proxy and upload run on a background thread, so the editor st
 With `-unattended` (Deadline), they run before the job ends, since the farm may quit Unreal right after the render.
 
 
-# Branches and deploying to production
+# Scripts
 
-- `dev`: day-to-day work.
-- `main`: exactly what is in production.
-
-Production gets the plugin from `main` through Perforce, one way only. A script is available for that, `scripts/sync_to_p4.ps1`: a dry run first, then a pending changelist that you review and submit yourself, then a tag on the synced commit so later runs can detect edits made in Perforce outside git.
-See [scripts/README.md](scripts/README.md) for its usage, and for `update_pip_hashes.py` (Python requirements).
+A script is available to deploy the plugin from main branch to a local P4 environment, `scripts/sync_to_p4.ps1`: a dry run first, then a pending changelist that you review and submit yourself, then a tag on the synced commit so later runs can detect edits made in Perforce outside git.
+See [scripts/README.md](scripts/README.md)
 
 
 # Repository
